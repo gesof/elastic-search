@@ -1,0 +1,32 @@
+{
+    "name": "gesof/elastic-search",
+    "version": "1.0.0",
+    "description": "Elastic Search utility",
+    "keywords": ["elastic search", "query", "query builder"],
+    "homepage": "https://bitbucket.org/gesof/elastic-search",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sebastian Radu",
+            "email": "seby@acron.ro",
+            "homepage": "https://acron.ro"
+        },
+        {
+            "name": "Alexandru Iordache",
+            "email": "alex@acron.ro",
+            "homepage": "https://acron.ro"
+        }
+    ],
+    "require": {
+        "php": "^7.0",
+        "elasticsearch/elasticsearch": ">=5.0"
+    },
+    "require-dev": {
+    },
+    "suggest": {
+    },
+    "autoload": {
+        "psr-4": { "Gesof\\ElasticSearch\\": "" }
+    }
+}
