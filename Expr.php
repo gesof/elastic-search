@@ -18,7 +18,7 @@ class Expr
     
     public function orX(array $args = array())
     {
-        return new Expr\OrX();
+        return new Expr\OrX($args);
     }
     
     public function eq($x, $y)
