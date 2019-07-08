@@ -1,5 +1,5 @@
 ## Using ElasticSearch query builder
-
+```
 $text = 'UFOs over China';
 
 $hosts = [
@@ -34,3 +34,4 @@ $qb
 
 $resultCount = $qb->getQuery()->count()->getCount();
 $documents = $qb->getQuery()->search()->getDocuments();
+```
