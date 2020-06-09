@@ -21,7 +21,8 @@ class CountQuery
     {
         unset($params['from']);
         unset($params['size']);
-        
+
+        unset($params['body']['size']);
         unset($params['body']['sort']);
         unset($params['body']['_source']);
         
