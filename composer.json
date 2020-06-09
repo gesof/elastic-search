@@ -1,6 +1,6 @@
 {
     "name": "gesof/elastic-search",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Elastic Search utility",
     "keywords": ["elastic search", "query", "query builder"],
     "homepage": "https://github.com/gesof/elastic-search",
