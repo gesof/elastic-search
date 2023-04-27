@@ -3,6 +3,7 @@
 namespace Gesof\ElasticSearch\Response;
 
 use Gesof\ElasticSearch\Result\Document;
+use Elastic\Elasticsearch\Response\Elasticsearch as ElasticsearchResponse;
 
 /**
  * Description of SearchResponse
@@ -11,15 +12,16 @@ use Gesof\ElasticSearch\Result\Document;
  */
 class SearchResponse
 {
-    protected $rsp;
+    protected ElasticsearchResponse $rsp;
     
-    protected $documents = array();
+    protected array $documents = [];
     
-    public function __construct($rsp)
+    public function __construct(ElasticsearchResponse $rsp)
     {
         $this->rsp = $rsp;
-        
-        $results = isset($this->rsp['hits']['hits']) ? $this->rsp['hits']['hits'] : array();
+        $responseData = $rsp->asArray();
+
+        $results = $responseData['hits']['hits'] ?? [];
         
         foreach ($results as $resultData) {
             $document = new Document($resultData['_source']);
@@ -28,13 +30,13 @@ class SearchResponse
         }
     }
     
-    public function getDocuments()
+    public function getDocuments(): array
     {
         return $this->documents;
     }
     
-    public function toArray()
+    public function toArray(): array
     {
-        return $this->rsp;
+        return $this->rsp->asArray();
     }
 }

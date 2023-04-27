@@ -3,9 +3,9 @@
 $text = 'UFOs over China';
 
 $hosts = [
-    'localhost',
+    'localhost:9200',
 ];
-$client = \Elasticsearch\ClientBuilder::create()
+$client = \Elastic\Elasticsearch\ClientBuilder::create()
     ->setHosts($hosts)
     ->build();
 
@@ -34,4 +34,8 @@ $qb
 
 $resultCount = $qb->getQuery()->count()->getCount();
 $documents = $qb->getQuery()->search()->getDocuments();
+
+foreach ($documents as $document) {
+    // echo $document->title . '<br />';
+}
 ```

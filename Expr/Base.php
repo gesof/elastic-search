@@ -10,26 +10,27 @@ namespace Gesof\ElasticSearch\Expr;
  */
 abstract class Base implements ExprInterface
 {
-    protected $parts = array();
+    protected array $parts = [];
     
     /**
      * 
      * @param array $args
      */
-    public function __construct(array $args = array())
+    public function __construct(array $args = [])
     {
         foreach ($args as $arg) {
             $this->parts[] = $arg;
         }
     }
-    
+
     /**
      * Add argument
-     * 
-     * @param type $arg
+     *
+     * @param ExprInterface $arg
+     *
      * @return $this
      */
-    public function add($arg)
+    public function add(ExprInterface $arg): static
     {
         $this->parts[] = $arg;
         
@@ -40,7 +41,7 @@ abstract class Base implements ExprInterface
     /**
      * @return integer
      */
-    public function count()
+    public function count(): int
     {
         return count($this->parts);
     }

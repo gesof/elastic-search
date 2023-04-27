@@ -2,8 +2,8 @@
 
 namespace Gesof\ElasticSearch;
 
-use Elasticsearch\Client;
-
+use Elastic\Elasticsearch\Client;
+use Gesof\ElasticSearch\Query\CountQuery;
 use Gesof\ElasticSearch\Response\SearchResponse;
 use Gesof\ElasticSearch\Response\CountResponse;
 
@@ -14,9 +14,8 @@ use Gesof\ElasticSearch\Response\CountResponse;
  */
 class Query 
 {
-    /** @var \Elasticsearch\Client */
-    protected $client;
-    protected $params = array();
+    protected Client $client;
+    protected array $params = [];
     
     public function __construct(Client $client, $params)
     {
@@ -28,9 +27,10 @@ class Query
      * Set max results
      * 
      * @param integer $maxResults
+     *
      * @return $this
      */
-    public function setMaxResults($maxResults)
+    public function setMaxResults(int $maxResults): static
     {
         $this->params['size'] = $maxResults;
 
@@ -41,9 +41,10 @@ class Query
      * Set first result (offset)
      * 
      * @param integer $firstResult
+     *
      * @return $this
      */
-    public function setFirstResult($firstResult)
+    public function setFirstResult(int $firstResult): static
     {
         $this->params['from'] = $firstResult;
         
@@ -53,7 +54,7 @@ class Query
     /**
      * @todo check if index, search or delete
      */
-    public function search()
+    public function search(): SearchResponse
     {
         $rsp = $this->client->search($this->params);
         
@@ -64,7 +65,7 @@ class Query
      * 
      * @return CountResponse
      */
-    public function count()
+    public function count(): CountResponse
     {
         $countQuery = $this->createCountQuery();
         
@@ -73,14 +74,14 @@ class Query
     
     /**
      * 
-     * @return \Gesof\ElasticSearch\Query\CountQuery
+     * @return CountQuery
      */
-    public function createCountQuery()
+    public function createCountQuery(): Query\CountQuery
     {
         return new Query\CountQuery($this->client, $this->params);
     }
     
-    public function toArray()
+    public function toArray(): array
     {
         return $this->params;
     }

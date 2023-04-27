@@ -9,13 +9,13 @@ namespace Gesof\ElasticSearch\Result;
  */
 class Document implements \IteratorAggregate, \Countable, \ArrayAccess
 {
-    protected $data = array();
+    protected array $data = [];
     
     /**
      * 
      * @param array $data
      */
-    public function __construct(array $data = array())
+    public function __construct(array $data = [])
     {
         $this->data = $data;
     }
@@ -25,7 +25,7 @@ class Document implements \IteratorAggregate, \Countable, \ArrayAccess
      * 
      * @return array
      */
-    public function getData()
+    public function getData(): array
     {
         return $this->data;
     }
@@ -34,12 +34,13 @@ class Document implements \IteratorAggregate, \Countable, \ArrayAccess
      * Get field value
      * 
      * @param string $field
+     *
      * @return mixed
      */
-    public function __get($field)
+    public function __get(string $field)
     {
         if (!isset($this->data[$field])) {
-            return;
+            return null;
         }
 
         return $this->data[$field];
@@ -49,18 +50,19 @@ class Document implements \IteratorAggregate, \Countable, \ArrayAccess
      * Check if field exists and has value. This method is called by empty()
      * 
      * @param string $field
+     *
      * @return boolean
      */
-    public function __isset($field)
+    public function __isset(string $field)
     {
         return isset($this->data[$field]);
     }
     
     /**
      * @param string $name
-     * @param mixed $value
+     * @param mixed  $value
      */
-    public function __set($name, $value)
+    public function __set(string $name, mixed $value)
     {
         $this->data[$name] = $value;
     }
@@ -76,7 +78,7 @@ class Document implements \IteratorAggregate, \Countable, \ArrayAccess
     /**
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return count($this->fields);
     }

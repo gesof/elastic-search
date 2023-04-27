@@ -2,6 +2,9 @@
 
 namespace Gesof\ElasticSearch;
 
+use Gesof\ElasticSearch\Expr\ExprInterface;
+use Elastic\Elasticsearch\Client;
+
 /**
  * Description of QueryBuilder
  *
@@ -9,10 +12,9 @@ namespace Gesof\ElasticSearch;
  */
 class QueryBuilder 
 {
-    /** @var \Elasticsearch\Client */
-    protected $client;
+    protected Client $client;
     /** @var string Table like */
-    protected $index;
+    protected string $index;
     /** 
      * Elastic search will deprecate this
      * https://www.elastic.co/guide/en/elasticsearch/reference/6.x/removal-of-types.html#_schedule_for_removal_of_mapping_types
@@ -20,20 +22,20 @@ class QueryBuilder
      */
     protected $type;
     
-    protected $parts = array(
-        'includes' => array(), // fields to include in final set
-        'excludes' => array(), // fields to exclude from final set
+    protected array $parts = [
+        'includes' => [], // fields to include in final set
+        'excludes' => [], // fields to exclude from final set
         'where' => NULL,
-        'sort' => array(),
+        'sort' => [],
         'size' => NULL, // result limit
         'from' => NULL, // result offset
-    );
-    
+    ];
+
     /**
-     * 
-     * @param type $client
+     *
+     * @param Client $client
      */
-    public function __construct($client)
+    public function __construct(Client $client)
     {
         $this->client = $client;
     }
@@ -44,7 +46,7 @@ class QueryBuilder
      * @param array $fields
      * @return $this
      */
-    public function include(array $fields)
+    public function include(array $fields): static
     {
         $this->parts['includes'] = $fields;
         
@@ -57,7 +59,7 @@ class QueryBuilder
      * @param array $fields
      * @return $this
      */
-    public function exclude(array $fields)
+    public function exclude(array $fields): static
     {
         $this->parts['excludes'] = $fields;
         
@@ -67,53 +69,55 @@ class QueryBuilder
     /**
      * Creates a new expresion
      * 
-     * @return \Gesof\ElasticSearch\Expr
+     * @return Expr
      */
-    public function expr()
+    public function expr(): Expr
     {
         return new Expr();
     }
-    
+
     /**
      * Set index (table)
-     * 
-     * @param type $table
+     *
+     * @param string $table
+     *
      * @return $this
      */
-    public function setTable($table)
+    public function setTable(string $table): static
     {
         $this->index = $table;
         
         return $this;
     }
-    
+
     /**
      * Set collection (table)
-     * 
-     * @deprecated will pe removed in future elastic search versions
-     * 
-     * https://www.elastic.co/guide/en/elasticsearch/reference/current/removal-of-types.html
-     * 
-     * @param type $database
+     *
+     * @param string $database
+     *
      * @return $this
+     * @deprecated will pe removed in future elastic search versions
+     *
+     * https://www.elastic.co/guide/en/elasticsearch/reference/current/removal-of-types.html
+     *
      */
-    public function setDatabase($database)
+    public function setDatabase(string $database): static
     {
         $this->type = $database;
         
         return $this;
     }
     
-    public function orderBy($field, $direction)
+    public function orderBy($field, $direction): static
     {
-        $this->parts['sort'] = array();
+        $this->parts['sort'] = [];
         
         $this->addOrderBy($field, $direction);
         
         return $this;
     }
     
-    public function addOrderBy($field, $direction)
+    public function addOrderBy($field, $direction): static
     {
         $this->parts['sort'][$field] = $direction;
         
@@ -126,7 +130,7 @@ class QueryBuilder
      * @param integer $maxResults
      * @return $this
      */
-    public function setMaxResults($maxResults)
+    public function setMaxResults(int $maxResults): static
     {
         $this->parts['size'] = $maxResults;
 
@@ -139,75 +143,43 @@ class QueryBuilder
      * @param integer $firstResult
      * @return $this
      */
-    public function setFirstResult($firstResult)
+    public function setFirstResult(int $firstResult): static
     {
         $this->parts['from'] = $firstResult;
         
         return $this;
     }
-    
+
     /**
      * Set where condition
-     * 
-     * @param type $expr
+     *
+     * @param ExprInterface $expr
+     *
      * @return $this
      */
-    public function where($expr)
+    public function where(ExprInterface $expr): static
     {
         $this->parts['where'] = $expr;
         
         return $this;
     }
-    
-    /**
-        $params = [
-            'index' => $rule->getIndex(),
-            'type' => $rule->getBucket(),
-//            'body' => [
-//                'query' => [
-//                    'match' => [
-//                        'testField' => 'abc'
-//                    ]
-//                ]
-//            ]
-            'body' => array(
-                'query' => array(
-                    'bool' => array(
-                        'must' => array(
-                            array(
-                                'match' => array(
-                                    'projects' => '123'
-                                )
-                            ),
-                            array(
-                                'match' => array(
-                                    'id' => 'abcd'
-                                )
-                            ),
-                        )
-                    )
-                )
-            )
-        ];
-     * @return type
-     */
-    
+
     /**
      * 
-     * @return \Gesof\ElasticSearch\Query
+     * @return Query
      */
-    public function getQuery()
+    public function getQuery(): Query
     {
         return new Query($this->client, $this->toArray());
     }
     
-    public function toArray()
+    public function toArray(): array
     {
-        $data = array(
+        $data = [
             'index' => $this->index,
             'type' =>  $this->type,
-        //    'body' => array()
-        );
+        //    'body' => []
+        ];
         
         if ($this->parts['where']) {
             $data['body']['query'] = $this->parts['where']->toArray();

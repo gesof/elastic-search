@@ -17,23 +17,23 @@ namespace Gesof\ElasticSearch\Expr;
  */
 class MatchText implements ExprInterface
 {
-    protected $fields = array();
-    protected $text;
+    protected array $fields = [];
+    protected string $text;
     
-    public function __construct($field, $text)
+    public function __construct(string|array $field, string $text)
     {
-        $this->fields = is_array($field) ? $field : array($field);
+        $this->fields = is_array($field) ? $field : [ $field ];
         $this->text = $text;
     }
     
-    public function toArray()
+    public function toArray(): array
     {
-        return array(
-            'simple_query_string' => array(
+        return [
+            'simple_query_string' => [
                 'query' => $this->text,
                 'fields' => $this->fields,
                 'default_operator'=> 'or'
-            )
-        );
+            ]
+        ];
     }
 }

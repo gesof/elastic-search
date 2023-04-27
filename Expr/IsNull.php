@@ -15,24 +15,24 @@ namespace Gesof\ElasticSearch\Expr;
  */
 class IsNull implements ExprInterface
 {
-    protected $field;
+    protected string $field;
     
-    public function __construct($field)
+    public function __construct(string $field)
     {
         $this->field = $field;
     }
     
-    public function toArray()
+    public function toArray(): array
     {
-        return array(
-            'bool' => array(
-                'must_not' => array(
-                    'exists' => array(
+        return [
+            'bool' => [
+                'must_not' => [
+                    'exists' => [
                         'field' => $this->field,
                         'boost' => 1
-                    )
-                )
-            )
-        );
+                    ]
+                ]
+            ]
+        ];
     }
 }

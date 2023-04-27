@@ -1,6 +1,6 @@
 {
     "name": "gesof/elastic-search",
-    "version": "1.0.4",
+    "version": "1.1.0",
     "description": "Elastic Search utility",
     "keywords": ["elastic search", "query", "query builder"],
     "homepage": "https://github.com/gesof/elastic-search",
@@ -19,8 +19,8 @@
         }
     ],
     "require": {
-        "php": "^7.0",
-        "elasticsearch/elasticsearch": ">=5.0"
+        "php": "^7.0||^8.0",
+        "elasticsearch/elasticsearch": "^8.0"
     },
     "require-dev": {
     },

@@ -13,7 +13,7 @@ namespace Gesof\ElasticSearch\Expr;
  *
  * @author seby
  */
-class Comparison
+class Comparison implements ExprInterface
 {
     const EQ  = 'match';
 //    const NEQ = '<>';
@@ -30,7 +30,7 @@ class Comparison
     /**
      * @var string
      */
-    protected $operator;
+    protected string $operator;
 
     /**
      * @var mixed
@@ -44,11 +44,19 @@ class Comparison
      * @param string $operator
      * @param mixed  $rightExpr
      */
-    public function __construct($leftExpr, $operator, $rightExpr)
+    public function __construct(mixed $leftExpr, string $operator, mixed $rightExpr)
     {
         $this->leftExpr  = $leftExpr;
         $this->operator  = $operator;
         $this->rightExpr = $rightExpr;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->leftExpr . ' ' . $this->operator . ' ' . $this->rightExpr;
     }
 
     /**
@@ -75,31 +83,23 @@ class Comparison
         return $this->rightExpr;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->leftExpr . ' ' . $this->operator . ' ' . $this->rightExpr;
-    }
-    
-    public function toArray()
+    public function toArray(): array
     {
         if ($this->operator === self::EQ) {
-            $params = array(
-                $this->operator => array(
+            $params = [
+                $this->operator => [
                     $this->leftExpr => $this->rightExpr
-                )
-            );
+                ]
+            ];
         }
         else {
-            $params = array(
-                'range' => array(
-                    $this->leftExpr => array(
+            $params = [
+                'range' => [
+                    $this->leftExpr => [
                         $this->operator => $this->rightExpr
-                    )
-                )
-            );
+                    ]
+                ]
+            ];
         }
         
         return $params;

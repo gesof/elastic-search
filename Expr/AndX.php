@@ -10,10 +10,10 @@ namespace Gesof\ElasticSearch\Expr;
 class AndX extends Base
 {
     /**
-     * 
-     * @return type
+     *
+     * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return array(
             'bool' => array(

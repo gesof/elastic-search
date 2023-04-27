@@ -2,6 +2,8 @@
 
 namespace Gesof\ElasticSearch\Response;
 
+use Elastic\Elasticsearch\Response\Elasticsearch as ElasticsearchResponse;
+
 /**
  * Description of CountResponse
  *
@@ -9,23 +11,25 @@ namespace Gesof\ElasticSearch\Response;
  */
 class CountResponse 
 {
-    protected $rsp;
+    protected  ElasticsearchResponse $rsp;
     
-    public function __construct($rsp)
+    public function __construct(ElasticsearchResponse $rsp)
     {
         $this->rsp = $rsp;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
-        return $this->rsp;
+        return $this->rsp->asArray();
     }
     
     /**
      * @return integer Result count
      */
-    public function getCount()
+    public function getCount(): int
     {
-        return array_key_exists('count', $this->rsp) ? (int) $this->rsp['count'] : 0;
+        $rsp = $this->rsp->asArray();
+
+        return $rsp['count'] ?? 0;
     }
 }
